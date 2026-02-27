@@ -4,29 +4,35 @@ import (
 	"github.com/tweemo/go-electric/utils"
 )
 
-func CalculateSimpleRatesStandardUserCost(usage float64) float64 {
-	ceSrSuPwhCharge := utils.MustFloat64Env("CE_SR_SU_PWH_CHARGE")
-	ceSrSuDailyCharge := utils.MustFloat64Env("CE_SR_SU_DAILY_CHARGE")
-	ceLevy := utils.MustFloat64Env("CE_LEVY")
+func SimpleRatesStandardUser(sortedRecords []utils.DayPower) float64 {
+	standard := utils.GetRate("Contact", "GoodNights", "standard")
+	standardRateMap := standard.(map[string]interface{})
 
-	cost := (ceSrSuPwhCharge + ceLevy) * usage
-	cost += ceSrSuDailyCharge * 30
+	usage := utils.TotalUsage(sortedRecords)
+	pwh, _ := utils.GetFloat(standardRateMap["pwh"])
+	daily, _ := utils.GetFloat(standardRateMap["daily"])
 
-	roundedCost, err := utils.RoundFloat(cost, 2)
-	if err != nil {
-		panic(err)
-	}
-
-	return roundedCost
+	totalCost := CalculateSimpleRatesCost(usage, pwh, daily)
+	return totalCost
 }
 
-func CalculateSimpleRatesLowUserCost(usage float64) float64 {
-	ceSrLuPwhCharge := utils.MustFloat64Env("CE_SR_LU_PWH_CHARGE")
-	ceSrLuDailyCharge := utils.MustFloat64Env("CE_SR_LU_DAILY_CHARGE")
-	ceLevy := utils.MustFloat64Env("CE_LEVY")
+func SimpleRatesLowUser(sortedRecords []utils.DayPower) float64 {
+	low := utils.GetRate("Contact", "GoodNights", "low")
+	lowRateMap := low.(map[string]interface{})
 
-	cost := (ceSrLuPwhCharge + ceLevy) * usage
-	cost += ceSrLuDailyCharge * 30
+	usage := utils.TotalUsage(sortedRecords)
+	pwh, _ := utils.GetFloat(lowRateMap["pwh"])
+	daily, _ := utils.GetFloat(lowRateMap["daily"])
+
+	totalCost := CalculateSimpleRatesCost(usage, pwh, daily)
+	return totalCost
+}
+
+func CalculateSimpleRatesCost(usage float64, pwh float64, daily float64) float64 {
+	levy := utils.GetLevy("Contact")
+
+	cost := (pwh + levy) * usage
+	cost += daily * 30
 
 	roundedCost, err := utils.RoundFloat(cost, 2)
 	if err != nil {

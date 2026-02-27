@@ -1,0 +1,78 @@
+{
+  "power_companies": [
+    {
+      "name": "Contact",
+      "levy": 0.00219,
+      "plans": [
+        {
+          "name": "GoodWeekends",
+          "description": "Free power from 9am to 5pm on the weekends",
+          "standard": {
+            "pwh": 0.29325,
+            "daily": 2.989
+          },
+          "low": {
+            "pwh": 0.35995,
+            "daily": 1.725
+          }
+        },
+        {
+          "name": "GoodNights",
+          "description": "Free power from 9pm to midnight Monday to Friday",
+          "standard": {
+            "pwh": 0.322,
+            "daily": 2.991
+          },
+          "low": {
+            "pwh": 0.39215,
+            "daily": 1.725
+          }
+        },
+        {
+          "name": "GoodCharge",
+          "description": "Variable kwH rate depending on time",
+          "standard": {
+            "pwh_7am_9pm": 0.3151,
+            "pwh_9pm_7am": 0.15525,
+            "daily": 2.99
+          },
+          "low": {
+            "pwh_7am_9pm": 0.3726,
+            "pwh_9pm_7am": 0.1863,
+            "daily": 1.725
+          }
+        },
+        {
+          "name": "SimpleRates",
+          "description": "basic plan with no frills",
+          "standard": {
+            "pwh": 0.24495,
+            "daily": 2.645
+          },
+          "low": {
+            "pwh": 0.28635,
+            "daily": 1.725
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nova",
+      "levy": 0.00276,
+      "plans": [
+        {
+          "name": "Basic",
+          "description": "basic plan with no frills",
+          "standard": {
+            "pwh": 0.25711,
+            "daily": 3.00965
+          },
+          "low": {
+            "pwh": 0.31572,
+            "daily": 1.72500
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -2,33 +2,33 @@ package cost_calculatr
 
 import "github.com/tweemo/go-electric/utils"
 
-func CalculateNovaStandardUserCost(sortedRecords []utils.DayPower) float64 {
-	nvSuPwhCharge := utils.MustFloat64Env("NV_SU_PWH_CHARGE")
-	nvDailyCharge := utils.MustFloat64Env("NV_SU_DAILY_CHARGE")
-	nvLevy := utils.MustFloat64Env("NV_LEVY")
+// Todo this could realistically just be a single func that we pass low or standard to
+func NovaGeneralRatesStandardUser(sortedRecords []utils.DayPower) float64 {
+	standard := utils.GetRate("Nova", "Basic", "standard")
+	standardRateMap := standard.(map[string]interface{})
+	pwh, _ := utils.GetFloat(standardRateMap["pwh"])
+	daily, _ := utils.GetFloat(standardRateMap["daily"])
 
-	usage := utils.TotalUsage(sortedRecords)
-
-	cost := (nvSuPwhCharge + nvLevy) * usage
-	cost += nvDailyCharge * 30
-
-	roundedCost, err := utils.RoundFloat(cost, 2)
-	if err != nil {
-		panic(err)
-	}
-
-	return roundedCost
+	totalCost := CalculateGeneralRatesCost(sortedRecords, pwh, daily)
+	return totalCost
 }
 
-func CalculateNovaLowUserCost(sortedRecords []utils.DayPower) float64 {
-	nvSuPwhCharge := utils.MustFloat64Env("NV_LU_PWH_CHARGE")
-	nvDailyCharge := utils.MustFloat64Env("NV_LU_DAILY_CHARGE")
-	nvLevy := utils.MustFloat64Env("NV_LEVY")
+func NovaGeneralRatesLowUser(sortedRecords []utils.DayPower) float64 {
+	low := utils.GetRate("Nova", "Basic", "low")
+	lowRateMap := low.(map[string]interface{})
+	pwh, _ := utils.GetFloat(lowRateMap["pwh"])
+	daily, _ := utils.GetFloat(lowRateMap["daily"])
 
+	totalCost := CalculateGeneralRatesCost(sortedRecords, pwh, daily)
+	return totalCost
+}
+
+func CalculateGeneralRatesCost(sortedRecords []utils.DayPower, pwh float64, daily float64) float64 {
 	usage := utils.TotalUsage(sortedRecords)
+	levy := utils.GetLevy("Nova")
 
-	cost := (nvSuPwhCharge + nvLevy) * usage
-	cost += nvDailyCharge * 30
+	cost := (pwh + levy) * usage
+	cost += daily * 30
 
 	roundedCost, err := utils.RoundFloat(cost, 2)
 	if err != nil {
