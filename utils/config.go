@@ -9,6 +9,13 @@ import (
 	"strconv"
 )
 
+type Rate struct {
+	Pwh         float64 `json:"pwh"`
+	Pwh_7am_9pm float64 `json:"pwh_7am_9pm"`
+	Pwh_9pm_7am float64 `json:"pwh_9pm_9pm"`
+	Daily       float64 `json:"daily"`
+}
+
 // MustFloat64Env returns the float64 value of an environment variable, or panics if it's not set
 func MustFloat64Env(key string) float64 {
 	s := os.Getenv(key)
@@ -22,7 +29,7 @@ func MustFloat64Env(key string) float64 {
 	return v
 }
 
-func GetRate(company string, plan string, usageType string) interface{} {
+func GetRate(company string, plan string, usageType string) Rate {
 	// Load the JSON file
 	file, err := os.Open("data/rates.json")
 	if err != nil {
@@ -65,8 +72,12 @@ func GetRate(company string, plan string, usageType string) interface{} {
 		log.Fatalf("No rates found for plan %s in company %s", plan, company)
 	}
 
-	// Todo fix this so we send back a float rather than interface and all usages dont need to run GetFloat
-	return planData[usageType]
+	rateMap := planData[usageType].(map[string]interface{})
+	rate := Rate{}
+	jsonData, _ := json.Marshal(rateMap)
+	json.Unmarshal(jsonData, &rate)
+
+	return rate
 }
 
 func GetFloat(unk interface{}) (float64, error) {

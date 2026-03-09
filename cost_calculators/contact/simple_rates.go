@@ -5,34 +5,26 @@ import (
 )
 
 func SimpleRatesStandardUser(sortedRecords []utils.DayPower) float64 {
-	standard := utils.GetRate("Contact", "GoodNights", "standard")
-	standardRateMap := standard.(map[string]interface{})
-
+	rate := utils.GetRate("Contact", "GoodNights", "standard")
 	usage := utils.TotalUsage(sortedRecords)
-	pwh, _ := utils.GetFloat(standardRateMap["pwh"])
-	daily, _ := utils.GetFloat(standardRateMap["daily"])
 
-	totalCost := CalculateSimpleRatesCost(usage, pwh, daily)
+	totalCost := CalculateSimpleRatesCost(usage, rate)
 	return totalCost
 }
 
 func SimpleRatesLowUser(sortedRecords []utils.DayPower) float64 {
-	low := utils.GetRate("Contact", "GoodNights", "low")
-	lowRateMap := low.(map[string]interface{})
-
+	rate := utils.GetRate("Contact", "GoodNights", "low")
 	usage := utils.TotalUsage(sortedRecords)
-	pwh, _ := utils.GetFloat(lowRateMap["pwh"])
-	daily, _ := utils.GetFloat(lowRateMap["daily"])
 
-	totalCost := CalculateSimpleRatesCost(usage, pwh, daily)
+	totalCost := CalculateSimpleRatesCost(usage, rate)
 	return totalCost
 }
 
-func CalculateSimpleRatesCost(usage float64, pwh float64, daily float64) float64 {
+func CalculateSimpleRatesCost(usage float64, rate utils.Rate) float64 {
 	levy := utils.GetLevy("Contact")
 
-	cost := (pwh + levy) * usage
-	cost += daily * 30
+	cost := (rate.Pwh + levy) * usage
+	cost += rate.Daily * 30
 
 	roundedCost, err := utils.RoundFloat(cost, 2)
 	if err != nil {
