@@ -1,4 +1,4 @@
-package cost_calculatr
+package cost_calculators
 
 import "github.com/tweemo/go-electric/utils"
 
