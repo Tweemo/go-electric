@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"log"
 	"os"
-	"path/filepath"
 	"strconv"
 	"time"
 
@@ -67,18 +66,8 @@ func filterColumns(records [][]string) [][]string {
 }
 
 // getUsageData returns the usage data from some source
-func GetUsageData() [][]string {
-	dirname, err := os.Getwd()
-	if err != nil {
-		log.Fatal("Unable to get user home directory", err)
-	}
-
-	usageFileName := os.Getenv("USAGE_FILE_NAME")
-	if usageFileName == "" {
-		log.Fatal("USAGE_FILE_NAME is not set in the .env file")
-	}
-
-	records := readCsvFile(filepath.Join(dirname, "data", usageFileName))
+func GetUsageData(filepath string) [][]string {
+	records := readCsvFile(filepath)
 
 	// Filter to keep only DateTime columns and float column
 	filteredRecords := filterColumns(records)

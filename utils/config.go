@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"reflect"
-	"strconv"
 )
 
 type Rate struct {
@@ -14,19 +13,6 @@ type Rate struct {
 	Pwh_7am_9pm float64 `json:"pwh_7am_9pm"`
 	Pwh_9pm_7am float64 `json:"pwh_9pm_9pm"`
 	Daily       float64 `json:"daily"`
-}
-
-// MustFloat64Env returns the float64 value of an environment variable, or panics if it's not set
-func MustFloat64Env(key string) float64 {
-	s := os.Getenv(key)
-	if s == "" {
-		log.Fatalf("env %s is required and must be set", key)
-	}
-	v, err := strconv.ParseFloat(s, 64)
-	if err != nil {
-		log.Fatalf("env %s must be a valid number, got %q: %v", key, s, err)
-	}
-	return v
 }
 
 func GetRate(company string, plan string, usageType string) Rate {
