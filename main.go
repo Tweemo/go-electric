@@ -46,9 +46,6 @@ func Costs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Todo This is will need be able to get the csv file that is saved into some sort of temp folder
-	// When the file is uploaded to the server via the front-end, save it to the temp folder then read it and run the calculations here
-	// Then send it back to the front-end in JSON format to make it easy to render for the user
 	r.ParseMultipartForm(10 << 20)
 
 	// Retrieve the uploaded file

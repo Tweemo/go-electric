@@ -2,7 +2,6 @@ package cost_calculators
 
 import "github.com/tweemo/go-electric/utils"
 
-// Todo this could realistically just be a single func that we pass low or standard to
 func NovaGeneralRatesStandardUser(sortedRecords []utils.DayPower) float64 {
 	rate := utils.GetRate("Nova", "Basic", "standard")
 
