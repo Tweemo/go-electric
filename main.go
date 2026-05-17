@@ -2,13 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
-
-	"github.com/rs/cors"
 
 	"github.com/tweemo/go-electric/cost_calculators"
 	"github.com/tweemo/go-electric/utils"
@@ -19,24 +17,15 @@ type RequestData struct {
 }
 
 func main() {
-	// Start HTTP server
-	http.HandleFunc("/api/costs", Costs)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/costs", Costs)
 
-	c := cors.New(cors.Options{
-		// You will need to configure your own CORS policy here
-		AllowedOrigins:   []string{"YOUR_ALLOWED_ORIGINS"},
-		AllowedMethods:   []string{"POST"},
-		AllowedHeaders:   []string{"Authorization", "Content-Type"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
-		MaxAge:           3600,
-	})
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
 
-	handler := c.Handler(http.DefaultServeMux)
-
-	// Start server on port 8080
-	fmt.Println("Server started on :8080")
-	http.ListenAndServe(":8080", handler)
+	log.Fatal(http.ListenAndServe(":"+port, mux))
 }
 
 func Costs(w http.ResponseWriter, r *http.Request) {
