@@ -1,1 +1,14 @@
+# Env files
 .env
+**/.env
+**/.env.local
+
+# Backend (Go)
+backend/go-electric
+backend/data/data.csv
+
+# Frontend (Next.js)
+frontend/node_modules
+frontend/.next
+frontend/out
+frontend/next-env.d.ts
