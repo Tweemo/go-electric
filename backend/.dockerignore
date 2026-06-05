@@ -1,0 +1,6 @@
+.env
+.env.local
+go-electric
+data/data.csv
+temp/
+*.md
