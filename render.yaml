@@ -1,0 +1,43 @@
+# Render Blueprint — deploys the Go API and Next.js UI as two Docker web services.
+# Docs: https://render.com/docs/blueprint-spec
+#
+# After the first deploy you must set the two `sync: false` env vars (the
+# services don't know each other's URLs until they exist):
+#   - go-electric-web  NEXT_PUBLIC_API_URL   -> the API service URL  (baked at BUILD time)
+#   - go-electric-api  CORS_ALLOWED_ORIGINS  -> the web service URL  (used at runtime)
+# Default Render URLs are https://<service-name>.onrender.com when the name is free.
+
+services:
+  # --- Go API ---
+  - type: web
+    name: go-electric-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: production
+      - key: GIN_MODE
+        value: release
+      - key: HOST
+        value: 0.0.0.0
+      # Render injects PORT and the app binds it automatically — do not set PORT here.
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false # set to the web service URL, e.g. https://go-electric-web.onrender.com
+
+  # --- Next.js UI ---
+  - type: web
+    name: go-electric-web
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerContext: ./frontend
+    dockerfilePath: ./frontend/Dockerfile
+    envVars:
+      # NEXT_PUBLIC_* is inlined at build time; Render passes this to the
+      # Dockerfile's matching ARG as a build argument.
+      - key: NEXT_PUBLIC_API_URL
+        sync: false # set to the API service URL, e.g. https://go-electric-api.onrender.com
