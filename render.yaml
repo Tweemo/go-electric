@@ -13,7 +13,7 @@ services:
     name: go-electric-api
     runtime: docker
     plan: free
-    region: oregon
+    region: singapore
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
     healthCheckPath: /health
@@ -33,7 +33,7 @@ services:
     name: go-electric-web
     runtime: docker
     plan: free
-    region: oregon
+    region: singapore
     dockerContext: ./frontend
     dockerfilePath: ./frontend/Dockerfile
     envVars:
