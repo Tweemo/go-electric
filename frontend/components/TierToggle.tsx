@@ -24,9 +24,14 @@ export function TierToggle({ value, onChange }: TierToggleProps) {
       }}
       variant="outline"
       spacing={0}
+      className="border-border bg-card"
     >
       {TIERS.map((tier) => (
-        <ToggleGroupItem key={tier} value={tier} className="px-4">
+        <ToggleGroupItem
+          key={tier}
+          value={tier}
+          className="px-4 font-semibold text-muted-foreground hover:bg-secondary hover:text-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+        >
           {TIER_DESCRIPTIONS[tier]}
         </ToggleGroupItem>
       ))}
