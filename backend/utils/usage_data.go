@@ -3,43 +3,29 @@ package utils
 import (
 	"encoding/csv"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 	"time"
-
-	"github.com/joho/godotenv"
 )
 
-func init() {
-	godotenv.Load()
-}
-
-func createMonthMap(sortedRecords []DayPower) map[string][]DayPower {
-	monthMap := make(map[string][]DayPower)
-	for _, record := range sortedRecords {
-		monthMap[record.month] = append(monthMap[record.month], record)
+func readCsv(r io.Reader) ([][]string, error) {
+	csvReader := csv.NewReader(r)
+	csvReader.Comma = ','
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse CSV: %w", err)
 	}
-
-	return monthMap
+	return records, nil
 }
 
 func readCsvFile(filePath string) ([][]string, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
-		msg := "Unable to read input file " + filePath
-		return nil, fmt.Errorf(msg+": %w", err)
+		return nil, fmt.Errorf("unable to read input file %s: %w", filePath, err)
 	}
 	defer f.Close()
-
-	csvReader := csv.NewReader(f)
-	csvReader.Comma = ','
-	records, err := csvReader.ReadAll()
-	if err != nil {
-		msg := "Unable to parse file as CSV for " + filePath
-		return nil, fmt.Errorf(msg+": %w", err)
-	}
-
-	return records, nil
+	return readCsv(f)
 }
 
 func filterColumns(records [][]string) [][]string {
@@ -52,35 +38,39 @@ func filterColumns(records [][]string) [][]string {
 		}
 
 		// Extract only the DateTime columns (9, 10) and float column (12)
-		if len(record) >= 13 {
-			startDateTime := record[9]
-			endDateTime := record[10]
-			usage := record[12]
+		startDateTime := record[9]
+		endDateTime := record[10]
+		usage := record[12]
 
-			// Validate that usage is a valid float
-			if _, err := strconv.ParseFloat(usage, 64); err == nil {
-				filteredRecords = append(filteredRecords, []string{startDateTime, endDateTime, usage})
-			}
+		// Validate that usage is a valid float
+		if _, err := strconv.ParseFloat(usage, 64); err == nil {
+			filteredRecords = append(filteredRecords, []string{startDateTime, endDateTime, usage})
 		}
 	}
 
 	return filteredRecords
 }
 
-// getUsageData returns the usage data from some source
+// GetUsageData reads and filters usage data from a CSV file on disk.
 func GetUsageData(filepath string) ([][]string, error) {
 	records, err := readCsvFile(filepath)
 	if err != nil {
 		return nil, err
 	}
-
-	// Filter to keep only DateTime columns and float column
-	filteredRecords := filterColumns(records)
-
-	return filteredRecords, nil
+	return filterColumns(records), nil
 }
 
-// calculateDayPower calculates the power usage for each day
+// ParseUsageData reads and filters usage data from an arbitrary reader (e.g. an
+// uploaded multipart file), avoiding a round-trip through disk.
+func ParseUsageData(r io.Reader) ([][]string, error) {
+	records, err := readCsv(r)
+	if err != nil {
+		return nil, err
+	}
+	return filterColumns(records), nil
+}
+
+// CalculateDayPower calculates the power usage for each day
 func CalculateDayPower(usageData [][]string) ([]DayPower, error) {
 	var sortedRecords []DayPower
 	i := 0

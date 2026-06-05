@@ -8,53 +8,45 @@ type DayPower struct {
 	usage []float64
 }
 
-// WeekdayUsage returns the total power usage during weekdays
+// DayCount returns the number of days represented by the records (one DayPower
+// per day), used for daily fixed charges.
+func DayCount(records []DayPower) int {
+	return len(records)
+}
+
+// WeekdayUsage returns the total power usage during weekdays for the given hour
+// range across all days in the records.
 func WeekdayUsage(records []DayPower, start, end int) float64 {
 	usage := 0.0
-
-	monthMap := createMonthMap(records)
-	monthRecords := monthMap["08/2025"]
-	for _, record := range monthRecords {
+	for _, record := range records {
 		if !isWeekend(record.day) {
 			usage += sumSlice(record.usage[start:end])
 		}
 	}
-
 	return usage
 }
 
-// WeekendUsage returns the total power usage during weekends
+// WeekendUsage returns the total power usage during weekends for the given hour
+// range across all days in the records.
 func WeekendUsage(records []DayPower, start, end int) float64 {
 	usage := 0.0
-
-	monthMap := createMonthMap(records)
-	monthRecords := monthMap["08/2025"]
-	for _, record := range monthRecords {
+	for _, record := range records {
 		if isWeekend(record.day) {
 			usage += sumSlice(record.usage[start:end])
 		}
 	}
-
 	return usage
 }
 
-// TotalUsage returns the total power usage across all days
+// TotalUsage returns the total power usage across all days in the records.
 func TotalUsage(records []DayPower) float64 {
 	usage := 0.0
-
-	monthMap := createMonthMap(records)
-	monthRecords := monthMap["08/2025"]
-	for _, record := range monthRecords {
+	for _, record := range records {
 		usage += sumSlice(record.usage[0:24])
 	}
-
 	return usage
 }
 
 func isWeekend(day string) bool {
-	if day == "Saturday" || day == "Sunday" {
-		return true
-	}
-
-	return false
+	return day == "Saturday" || day == "Sunday"
 }

@@ -1,37 +1,19 @@
 package cost_calculators
 
 import (
+	"github.com/tweemo/go-electric/rates"
 	"github.com/tweemo/go-electric/utils"
 )
 
-func GoodWeekendsStandardUser(sortedRecords []utils.DayPower) float64 {
-	rate := utils.GetRate("Contact", "GoodWeekends", "standard")
-
-	totalCost := CalculateGoodWeekendsCost(sortedRecords, rate)
-	return totalCost
-}
-
-func GoodWeekendsLowUser(sortedRecords []utils.DayPower) float64 {
-	rate := utils.GetRate("Contact", "GoodWeekends", "low")
-
-	totalCost := CalculateGoodWeekendsCost(sortedRecords, rate)
-	return totalCost
-}
-
-func CalculateGoodWeekendsCost(sortedRecords []utils.DayPower, rate utils.Rate) float64 {
-	weekdayUsage := utils.WeekdayUsage(sortedRecords, 0, 24)
-	weekendMorningUsage := utils.WeekendUsage(sortedRecords, 0, 9)
-	weekendEveningUsage := utils.WeekendUsage(sortedRecords, 17, 24)
+// CalculateGoodWeekendsCost prices the GoodWeekends plan. levy is unused.
+func CalculateGoodWeekendsCost(records []utils.DayPower, rate rates.Rate, levy float64) (float64, error) {
+	weekdayUsage := utils.WeekdayUsage(records, 0, 24)
+	weekendMorningUsage := utils.WeekendUsage(records, 0, 9)
+	weekendEveningUsage := utils.WeekendUsage(records, 17, 24)
 
 	usage := weekdayUsage + weekendMorningUsage + weekendEveningUsage
 
-	cost := rate.Pwh * usage
-	cost += rate.Daily * 30
+	cost := rate.Pwh*usage + rate.Daily*float64(utils.DayCount(records))
 
-	roundedCost, err := utils.RoundFloat(cost, 2)
-	if err != nil {
-		panic(err)
-	}
-
-	return roundedCost
+	return utils.RoundFloat(cost, 2)
 }

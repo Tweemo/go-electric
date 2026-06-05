@@ -1,32 +1,15 @@
 package cost_calculators
 
-import "github.com/tweemo/go-electric/utils"
+import (
+	"github.com/tweemo/go-electric/rates"
+	"github.com/tweemo/go-electric/utils"
+)
 
-func NovaGeneralRatesStandardUser(sortedRecords []utils.DayPower) float64 {
-	rate := utils.GetRate("Nova", "Basic", "standard")
+// CalculateGeneralRatesCost prices Nova's general rates plan, applying the levy.
+func CalculateGeneralRatesCost(records []utils.DayPower, rate rates.Rate, levy float64) (float64, error) {
+	usage := utils.TotalUsage(records)
 
-	totalCost := CalculateGeneralRatesCost(sortedRecords, rate)
-	return totalCost
-}
+	cost := (rate.Pwh+levy)*usage + rate.Daily*float64(utils.DayCount(records))
 
-func NovaGeneralRatesLowUser(sortedRecords []utils.DayPower) float64 {
-	rate := utils.GetRate("Nova", "Basic", "low")
-
-	totalCost := CalculateGeneralRatesCost(sortedRecords, rate)
-	return totalCost
-}
-
-func CalculateGeneralRatesCost(sortedRecords []utils.DayPower, rate utils.Rate) float64 {
-	usage := utils.TotalUsage(sortedRecords)
-	levy := utils.GetLevy("Nova")
-
-	cost := (rate.Pwh + levy) * usage
-	cost += rate.Daily * 30
-
-	roundedCost, err := utils.RoundFloat(cost, 2)
-	if err != nil {
-		panic(err)
-	}
-
-	return roundedCost
+	return utils.RoundFloat(cost, 2)
 }
