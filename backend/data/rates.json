@@ -8,50 +8,50 @@
           "name": "GoodWeekends",
           "description": "Free power from 9am to 5pm on the weekends",
           "standard": {
-            "pwh": 0.29325,
+            "pwh": 0.31165,
             "daily": 2.989
           },
           "low": {
             "pwh": 0.35995,
-            "daily": 1.725
+            "daily": 2.07
           }
         },
         {
           "name": "GoodNights",
           "description": "Free power from 9pm to midnight Monday to Friday",
           "standard": {
-            "pwh": 0.322,
-            "daily": 2.991
+            "pwh": 0.3542,
+            "daily": 2.875
           },
           "low": {
-            "pwh": 0.39215,
-            "daily": 1.725
+            "pwh": 0.3979,
+            "daily": 2.07
           }
         },
         {
           "name": "GoodCharge",
           "description": "Variable kwH rate depending on time",
           "standard": {
-            "pwh_7am_9pm": 0.3151,
-            "pwh_9pm_7am": 0.15525,
+            "pwh_7am_9pm": 0.33695,
+            "pwh_9pm_7am": 0.1656,
             "daily": 2.99
           },
           "low": {
-            "pwh_7am_9pm": 0.3726,
-            "pwh_9pm_7am": 0.1863,
-            "daily": 1.725
+            "pwh_7am_9pm": 0.3772,
+            "pwh_9pm_7am": 0.1886,
+            "daily": 2.07
           }
         },
         {
           "name": "SimpleRates",
           "description": "basic plan with no frills",
           "standard": {
-            "pwh": 0.24495,
+            "pwh": 0.2599,
             "daily": 2.645
           },
           "low": {
-            "pwh": 0.28635,
-            "daily": 1.725
+            "pwh": 0.28405,
+            "daily": 2.07
           }
         }
       ]
@@ -62,14 +62,34 @@
       "plans": [
         {
           "name": "Basic",
-          "description": "basic plan with no frills",
+          "description": "Basic no fixed term plan using the anytime / per kWh rate",
           "standard": {
-            "pwh": 0.25711,
-            "daily": 3.00965
+            "pwh": 0.29443,
+            "daily": 3.24303
           },
           "low": {
-            "pwh": 0.31572,
-            "daily": 1.72500
+            "pwh": 0.34796,
+            "daily": 2.07000
+          }
+        }
+      ]
+    },
+    {
+      "name": "Powershop",
+      "levy": 0,
+      "plans": [
+        {
+          "name": "Basic",
+          "description": "Basic no fixed term plan. Off peak rates are calculated from 9pm to 7am and peak rates are calculated from 7am to 9pm. Rates are assuming you purchase the monthly powerpacks.",
+          "standard": {
+            "pwh_7am_9pm": 0.3345,
+            "pwh_9pm_7am": 0.2172,
+            "daily": 2.7544
+          },
+          "low": {
+            "pwh_7am_9pm": 0.371,
+            "pwh_9pm_7am": 0.2537,
+            "daily": 1.9550
           }
         }
       ]
