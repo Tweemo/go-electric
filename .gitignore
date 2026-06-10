@@ -3,9 +3,14 @@
 **/.env
 **/.env.local
 
+# OS files
+.DS_Store
+**/.DS_Store
+
 # Backend (Go)
 backend/go-electric
 backend/data/data.csv
+backend/temp/
 
 # Frontend (Next.js)
 frontend/node_modules

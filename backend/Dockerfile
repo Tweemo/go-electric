@@ -14,7 +14,8 @@ FROM alpine:3.21
 WORKDIR /app
 COPY --from=build /out/go-electric /app/go-electric
 # Runtime config the server reads relative to its working dir (rates.json).
-# data.csv is excluded via .dockerignore; the server creates it on upload.
+# Uploads are parsed in-memory and never written to disk (data.csv is excluded
+# via .dockerignore and is not needed at runtime).
 COPY --from=build /src/data ./data
 
 # The server defaults to localhost:8080; in a container bind to all interfaces.
