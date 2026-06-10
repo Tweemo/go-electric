@@ -13,7 +13,7 @@ func CalculateGoodChargeCost(records []utils.DayPower, rate rates.Rate, levy flo
 	morningCost := morningUsage * rate.Pwh7amTo9pm
 
 	weekdayEveningUsage := utils.WeekdayUsage(records, 0, 7) + utils.WeekdayUsage(records, 21, 24)
-	weekendEveningUsage := utils.WeekdayUsage(records, 0, 7) + utils.WeekendUsage(records, 21, 24)
+	weekendEveningUsage := utils.WeekendUsage(records, 0, 7) + utils.WeekendUsage(records, 21, 24)
 	eveningUsage := weekdayEveningUsage + weekendEveningUsage
 	eveningCost := eveningUsage * rate.Pwh9pmTo7am
 

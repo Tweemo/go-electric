@@ -11,6 +11,7 @@ export const TIERS: Tier[] = ["Standard", "Low"];
 export const PROVIDER_LABELS: Record<string, string> = {
   contact: "Contact Energy",
   nova: "Nova Energy",
+  powershop: "Powershop",
 };
 
 // Plan keys carry a tier suffix ("Standard" | "Low"). These labels cover the
@@ -21,6 +22,7 @@ const PLAN_LABELS: Record<string, string> = {
   GoodWeekends: "Good Weekends",
   SimpleRates: "Simple Rates",
   GeneralRates: "General Rates",
+  Basic: "Basic",
 };
 
 export function tierOf(planKey: string): Tier | null {

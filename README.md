@@ -18,6 +18,10 @@ New Zealand households can choose from multiple power companies, each with sever
 
 Costs are calculated from your real hourly usage data — not averages or estimates.
 
+Your privacy is protected by design: identifying columns (ICP, meter number, name,
+account) are stripped in your browser, so only anonymous date-and-usage figures are
+ever uploaded. The backend processes those entirely in memory and stores nothing.
+
 ## Tech stack
 
 - **Backend** — Go with the [Gin](https://github.com/gin-gonic/gin) HTTP framework; parses usage CSVs in-memory and applies each provider's pricing model

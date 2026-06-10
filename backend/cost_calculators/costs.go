@@ -3,6 +3,7 @@ package cost_calculators
 import (
 	contact "github.com/tweemo/go-electric/cost_calculators/contact"
 	nova "github.com/tweemo/go-electric/cost_calculators/nova"
+	powershop "github.com/tweemo/go-electric/cost_calculators/powershop"
 	"github.com/tweemo/go-electric/rates"
 	"github.com/tweemo/go-electric/utils"
 )
@@ -35,6 +36,8 @@ var specs = []planSpec{
 	{"contact", "SimpleRatesLow", "Contact", "GoodNights", "low", "Contact", contact.CalculateSimpleRatesCost},
 	{"nova", "GeneralRatesStandard", "Nova", "Basic", "standard", "Nova", nova.CalculateGeneralRatesCost},
 	{"nova", "GeneralRatesLow", "Nova", "Basic", "low", "Nova", nova.CalculateGeneralRatesCost},
+	{"powershop", "BasicStandard", "Powershop", "Basic", "standard", "", powershop.CalculateBasicCost},
+	{"powershop", "BasicLow", "Powershop", "Basic", "low", "", powershop.CalculateBasicCost},
 }
 
 // AllPrices computes every plan's cost for the given usage records using the

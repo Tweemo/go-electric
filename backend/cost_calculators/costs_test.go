@@ -17,6 +17,9 @@ func testRates() *rates.Rates {
 		{Name: "Nova", Levy: 0.003, Plans: []rates.Plan{
 			{Name: "Basic", Standard: rates.Rate{Pwh: 0.25, Daily: 3.0}, Low: rates.Rate{Pwh: 0.31, Daily: 1.72}},
 		}},
+		{Name: "Powershop", Levy: 0, Plans: []rates.Plan{
+			{Name: "Basic", Standard: rates.Rate{Pwh7amTo9pm: 0.33, Pwh9pmTo7am: 0.21, Daily: 2.75}, Low: rates.Rate{Pwh7amTo9pm: 0.37, Pwh9pmTo7am: 0.25, Daily: 1.95}},
+		}},
 	}}
 }
 
@@ -44,6 +47,12 @@ func TestAllPricesKnownValue(t *testing.T) {
 	if got != 3.25 {
 		t.Errorf("GeneralRatesStandard = %v, want 3.25", got)
 	}
+
+	// Powershop Basic standard: the fixture's 1.0 kWh at hour 0 is off-peak.
+	// off-peak 1.0 * 0.21 + daily 2.75 * 1 day = 2.96
+	if got := out["powershop"]["BasicStandard"]; got != 2.96 {
+		t.Errorf("BasicStandard = %v, want 2.96", got)
+	}
 }
 
 func TestAllPricesHasAllKeys(t *testing.T) {
@@ -64,6 +73,11 @@ func TestAllPricesHasAllKeys(t *testing.T) {
 	for _, k := range []string{"GeneralRatesStandard", "GeneralRatesLow"} {
 		if _, ok := out["nova"][k]; !ok {
 			t.Errorf("missing nova key %q", k)
+		}
+	}
+	for _, k := range []string{"BasicStandard", "BasicLow"} {
+		if _, ok := out["powershop"][k]; !ok {
+			t.Errorf("missing powershop key %q", k)
 		}
 	}
 }
