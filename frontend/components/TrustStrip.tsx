@@ -4,7 +4,7 @@ const ITEMS = [
   {
     icon: Shield,
     title: "Private by design",
-    body: "Your file is processed in memory to calculate costs and is never stored.",
+    body: "Your ICP, meter number and name are stripped in your browser — only anonymous date and usage figures are sent, and nothing is ever stored.",
   },
   {
     icon: Cpu,

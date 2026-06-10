@@ -26,8 +26,10 @@ export function CsvFormatGuide({ onSample }: CsvFormatGuideProps) {
             </h3>
             <p className="mb-7 text-[15px] leading-relaxed text-muted-foreground">
               We read the standard half-hourly meter export (the ICP consumption
-              file) most NZ retailers provide. Each <code className="rounded bg-muted px-1 font-mono text-[13px]">DET</code>{" "}
-              row is one reading interval; we use the date-time and usage columns.
+              file) most NZ retailers provide, as well as simpler date-and-usage
+              exports. Only the date-time and usage columns are used — your browser
+              strips out everything else (ICP, meter number, name) before anything
+              is uploaded.
             </p>
             <div className="mb-7 flex flex-col gap-3">
               {COLUMNS.map((c) => (
